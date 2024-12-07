@@ -162,7 +162,32 @@ module.exports = grammar({
     ...preprocIf('_in_enumerator_list', $ => seq($.enumerator, ',')),
     ...preprocIf('_in_enumerator_list_no_comma', $ => $.enumerator, -1),
 
-    preproc_arg: _ => token(prec(-1, /\S([^/\n]|\/[^*]|\\\r?\n)*/)),
+
+    _bart_geier_item: $ => choice(
+        $.expression_statement,
+    ),
+
+    //token.immediate(/[ ]*(\\\r?\n)*/),
+    // field('name', token.immediate(/[ ]*/)),
+    // preproc_arg: _ => token(prec(-1, /\S([^/\n]|\/[^*]|\\\r?\n)*/)),
+    //preproc_arg: $ => choice($.identifier, $.number_literal, ),
+    // bartgeier
+    preproc_arg: $ => 
+      choice(
+        $.identifier,
+        $.number_literal,
+        $.call_expression,
+        $.parenthesized_expression,
+        $.do_statement,
+        $.while_statement,
+        $.for_statement,
+        repeat1($._bart_geier_item),
+        //$._block_item,
+        //repeat1($._top_level_item),
+        //repeat1($._block_item),
+      ),
+    //preproc_arg: $ => seq( token(/[ ]*/), $.identifier, ),
+
     preproc_directive: _ => /#[ \t]*[a-zA-Z0-9]\w*/,
 
     _preproc_expression: $ => choice(
@@ -841,6 +866,7 @@ module.exports = grammar({
       ';',
     ),
 
+
     if_statement: $ => prec.right(seq(
       'if',
       field('condition', $.parenthesized_expression),
@@ -880,7 +906,8 @@ module.exports = grammar({
       field('body', $.statement),
       'while',
       field('condition', $.parenthesized_expression),
-      ';',
+      //';',
+      //choice(';', token("/\r?\n/"),), // bartgeier
     ),
 
     for_statement: $ => seq(
