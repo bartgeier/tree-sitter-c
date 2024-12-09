@@ -182,6 +182,7 @@ module.exports = grammar({
         $.while_statement,
         $.for_statement,
         repeat1($._bart_geier_item),
+        token(prec(-1, /\S([^/\n]|\/[^*]|\\\r?\n)*/)),
         //$._block_item,
         //repeat1($._top_level_item),
         //repeat1($._block_item),
