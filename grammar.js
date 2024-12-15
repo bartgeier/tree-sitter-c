@@ -167,6 +167,7 @@ module.exports = grammar({
         $.expression_statement,
     ),
 
+
     //token.immediate(/[ ]*(\\\r?\n)*/),
     // field('name', token.immediate(/[ ]*/)),
     // preproc_arg: _ => token(prec(-1, /\S([^/\n]|\/[^*]|\\\r?\n)*/)),
@@ -174,13 +175,14 @@ module.exports = grammar({
     // bartgeier
     preproc_arg: $ => 
       choice(
-        $.identifier,
+        prec(1, seq($.identifier,optional(','))),
         $.number_literal,
-        $.call_expression,
+        repeat1(prec(-2,$.call_expression)),
+        //$.call_expression,
         $.parenthesized_expression,
         $.do_statement,
-        $.while_statement,
-        $.for_statement,
+        //$.while_statement,
+        //$.for_statement,
         repeat1($._bart_geier_item),
         token(prec(-1, /\S([^/\n]|\/[^*]|\\\r?\n)*/)),
         //$._block_item,

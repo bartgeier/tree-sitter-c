@@ -1940,16 +1940,44 @@
       "type": "CHOICE",
       "members": [
         {
-          "type": "SYMBOL",
-          "name": "identifier"
+          "type": "PREC",
+          "value": 1,
+          "content": {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "SYMBOL",
+                "name": "identifier"
+              },
+              {
+                "type": "CHOICE",
+                "members": [
+                  {
+                    "type": "STRING",
+                    "value": ","
+                  },
+                  {
+                    "type": "BLANK"
+                  }
+                ]
+              }
+            ]
+          }
         },
         {
           "type": "SYMBOL",
           "name": "number_literal"
         },
         {
-          "type": "SYMBOL",
-          "name": "call_expression"
+          "type": "REPEAT1",
+          "content": {
+            "type": "PREC",
+            "value": -2,
+            "content": {
+              "type": "SYMBOL",
+              "name": "call_expression"
+            }
+          }
         },
         {
           "type": "SYMBOL",
@@ -1958,14 +1986,6 @@
         {
           "type": "SYMBOL",
           "name": "do_statement"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "while_statement"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "for_statement"
         },
         {
           "type": "REPEAT1",
